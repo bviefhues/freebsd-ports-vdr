@@ -1,0 +1,21 @@
+--- PLUGINS/src/osddemo/Makefile.orig	2014-01-01 13:29:54 UTC
++++ PLUGINS/src/osddemo/Makefile
+@@ -65,7 +65,7 @@ all: $(SOFILE)
+ 
+ ### Dependencies:
+ 
+-MAKEDEP = $(CXX) -MM -MG
++MAKEDEP = $(CXX) -MM # # # # # # # # # # # # -MG
+ DEPFILE = .dependencies
+ $(DEPFILE): Makefile
+ 	@$(MAKEDEP) $(CXXFLAGS) $(DEFINES) $(INCLUDES) $(OBJS:%.o=%.c) > $@
+@@ -78,7 +78,8 @@ $(SOFILE): $(OBJS)
+ 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(OBJS) -o $@
+ 
+ install-lib: $(SOFILE)
+-	install -D $^ $(DESTDIR)$(LIBDIR)/$^.$(APIVERSION)
++	@mkdir -p $(DESTDIR)$(LIBDIR)
++	install $^ $(DESTDIR)$(LIBDIR)/$^.$(APIVERSION)
+ 
+ install: install-lib
+ 

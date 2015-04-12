@@ -1,0 +1,19 @@
+--- Make.config.template.orig	2015-02-09 09:58:45 UTC
++++ Make.config.template
+@@ -26,6 +26,16 @@ endif
+ 
+ # Default directories (adjust as necessary or desired):
+ 
++# FreeBSD
++# you have to set DVBDIR to a valid path!!!
++# you will need extra patches for DVBDIR!!!
++#DVBDIR   = /usr/local/include
++LOCDIR       = $(PREFIX)/share/locale
++PLUGINDIR    = ./PLUGINS
++PLUGINLIBDIR = $(PREFIX)/lib/vdr
++VIDEODIR     = /video
++CONFDIR      = $(PREFIX)/etc/vdr
++
+ #PREFIX    = /usr/local
+ #BINDIR    = $(PREFIX)/bin
+ #INCDIR    = $(PREFIX)/include

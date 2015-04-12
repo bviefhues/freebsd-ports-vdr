@@ -1,0 +1,19 @@
+--- libsi/Makefile.orig	2015-02-11 10:24:54 UTC
++++ libsi/Makefile
+@@ -8,6 +8,7 @@
+ AR       ?= ar
+ ARFLAGS  ?= ru
+ RANLIB   ?= ranlib
++INCLUDES ?= -I/usr/local/include
+ 
+ -include ../Make.config
+ 
+@@ -22,7 +23,7 @@ OBJS = util.o si.o section.o descriptor.
+ 
+ ### Dependencies:
+ 
+-MAKEDEP = $(CXX) -MM -MG
++MAKEDEP = $(CXX) -MM # # # # # # # # # # # # # -MG
+ DEPFILE = .dependencies
+ $(DEPFILE): Makefile
+ 	@$(MAKEDEP) $(DEFINES) $(INCLUDES) $(OBJS:%.o=%.c) > $@

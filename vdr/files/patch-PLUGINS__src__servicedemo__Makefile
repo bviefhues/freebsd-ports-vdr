@@ -1,0 +1,23 @@
+--- PLUGINS/src/servicedemo/Makefile.orig	2014-01-01 13:29:54 UTC
++++ PLUGINS/src/servicedemo/Makefile
+@@ -62,7 +62,7 @@ all: libvdr-$(PLUGIN1).so libvdr-$(PLUGI
+ 
+ ### Dependencies:
+ 
+-MAKEDEP = $(CXX) -MM -MG
++MAKEDEP = $(CXX) -MM # # # # # # # # # # # # -MG
+ DEPFILE = .dependencies
+ $(DEPFILE): Makefile
+ 	@$(MAKEDEP) $(CXXFLAGS) $(DEFINES) $(INCLUDES) $(OBJS:%.o=%.c) > $@
+@@ -78,8 +78,9 @@ libvdr-$(PLUGIN2).so: $(PLUGIN2).o
+ 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(PLUGIN2).o -o $@
+ 
+ install-lib: libvdr-$(PLUGIN1).so libvdr-$(PLUGIN2).so
+-	install -D libvdr-$(PLUGIN1).so $(DESTDIR)$(LIBDIR)/libvdr-$(PLUGIN1).so.$(APIVERSION)
+-	install -D libvdr-$(PLUGIN2).so $(DESTDIR)$(LIBDIR)/libvdr-$(PLUGIN2).so.$(APIVERSION)
++	@mkdir -p $(DESTDIR)$(LIBDIR)
++	install libvdr-$(PLUGIN1).so $(DESTDIR)$(LIBDIR)/libvdr-$(PLUGIN1).so.$(APIVERSION)
++	install libvdr-$(PLUGIN2).so $(DESTDIR)$(LIBDIR)/libvdr-$(PLUGIN2).so.$(APIVERSION)
+ 
+ install: install-lib
+ 

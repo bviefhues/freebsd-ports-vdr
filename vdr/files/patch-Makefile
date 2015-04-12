@@ -1,0 +1,71 @@
+--- Makefile.orig	2015-02-09 12:28:24 UTC
++++ Makefile
+@@ -19,7 +19,7 @@ CXXFLAGS ?= -g -O3 -Wall -Werror=overloa
+ CDEFINES  = -D_GNU_SOURCE
+ CDEFINES += -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+ 
+-LIBS      = -ljpeg -lpthread -ldl -lcap -lrt $(shell pkg-config --libs freetype2 fontconfig)
++LIBS      = -ljpeg -lpthread -lintl -liconv -lutil -lrt $(shell pkg-config --libs freetype2 fontconfig)
+ INCLUDES ?= $(shell pkg-config --cflags freetype2 fontconfig)
+ 
+ # Directories:
+@@ -38,9 +38,9 @@ PREFIX    ?= /usr/local
+ BINDIR    ?= $(PREFIX)/bin
+ INCDIR    ?= $(PREFIX)/include
+ LIBDIR    ?= $(PREFIX)/lib/vdr
+-LOCDIR    ?= $(PREFIX)/share/locale
+-MANDIR    ?= $(PREFIX)/share/man
+-PCDIR     ?= $(PREFIX)/lib/pkgconfig
++LOCDIR    ?= $(PREFIX)/locale
++MANDIR    ?= $(PREFIX)/man
++PCDIR     ?= $(PREFIX)/libdata/pkgconfig
+ RESDIR    ?= $(PREFIX)/share/vdr
+ 
+ # Source documentation
+@@ -125,7 +125,7 @@ all: vdr i18n plugins
+ 
+ # Dependencies:
+ 
+-MAKEDEP = $(CXX) -MM -MG
++MAKEDEP = $(CXX) -MM # # # # # # # # # # # # # # # # -MG
+ DEPFILE = .dependencies
+ $(DEPFILE): Makefile
+ 	@$(MAKEDEP) $(DEFINES) $(INCLUDES) $(OBJS:%.o=%.c) > $@
+@@ -187,7 +187,8 @@ $(I18Npot): $(wildcard *.c)
+ 	@touch $@
+ 
+ $(I18Nmsgs): $(LOCALEDIR)/%/LC_MESSAGES/vdr.mo: $(PODIR)/%.mo
+-	install -D -m644 $< $@
++	@mkdir -p $(dir $@)
++	install -m644 $< $@
+ 
+ .PHONY: i18n
+ i18n: $(I18Nmsgs)
+@@ -201,6 +202,9 @@ install-i18n: i18n
+ include-dir:
+ 	@mkdir -p include/vdr
+ 	@(cd include/vdr; for i in ../../*.h; do ln -fs $$i .; done)
++	@cp Make.config include/vdr/Make.config
++	@cp Make.global include/vdr/Make.global
++	@cp ../../Makefile.plugins include/vdr/Makefile.plugins
+ 	@mkdir -p include/libsi
+ 	@(cd include/libsi; for i in ../../libsi/*.h; do ln -fs $$i .; done)
+ 
+@@ -226,7 +230,7 @@ plugins: include-dir vdr.pc
+ 	       continue;\
+ 	       fi;\
+ 	    # New Makefile\
+-	    INCLUDES="-I$(CWD)/include"\
++	    INCLUDES="-I$(CWD)/include -I/usr/local/include"\
+ 	    $(MAKE) --no-print-directory -C "$(PLUGINDIR)/src/$$i" VDRDIR="$(CWD)" || failed="$$failed $$i";\
+ 	    if [ -n "$(LCLBLD)" ] ; then\
+ 	       (cd $(PLUGINDIR)/src/$$i; for l in `find -name "libvdr-*.so" -o -name "lib$$i-*.so"`; do install $$l $(LIBDIR)/`basename $$l`.$(APIVERSION); done);\
+@@ -262,7 +266,7 @@ install: install-pc install-bin install-
+ 
+ install-bin: vdr
+ 	@mkdir -p $(DESTDIR)$(BINDIR)
+-	@cp --remove-destination vdr svdrpsend $(DESTDIR)$(BINDIR)
++	@cp vdr svdrpsend $(DESTDIR)$(BINDIR)
+ 
+ # Configuration files:
+ 
