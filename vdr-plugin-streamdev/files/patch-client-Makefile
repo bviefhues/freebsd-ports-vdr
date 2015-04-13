@@ -1,14 +1,29 @@
---- client/Makefile.orig
+--- client/Makefile.orig	2015-04-13 10:20:59 UTC
 +++ client/Makefile
-@@ -70,7 +70,11 @@ libvdr-$(PLUGIN).so: $(CLIENTOBJS) $(COM
+@@ -32,7 +32,7 @@ all: libvdr-$(PLUGIN).so i18n
+ 
+ ### Dependencies:
+ 
+-MAKEDEP = $(CXX) -MM -MG
++MAKEDEP = $(CXX) -MM # # -MG
+ DEPFILE = .dependencies
+ 
+ $(DEPFILE): Makefile
+@@ -43,7 +43,7 @@ $(DEPFILE): Makefile
+ ### Internationalization (I18N):
+ 
+ PODIR     = po
+-LOCALEDIR = $(VDRDIR)/locale
++LOCALEDIR = ../locale
+ I18Npo    = $(wildcard $(PODIR)/*.po)
+ I18Nmsgs  = $(addprefix $(LOCALEDIR)/, $(addsuffix /LC_MESSAGES/vdr-$(PLUGIN).mo, $(notdir $(foreach file, $(I18Npo), $(basename $(file))))))
+ I18Npot   = $(PODIR)/$(PLUGIN).pot
+@@ -70,7 +70,7 @@ libvdr-$(PLUGIN).so: $(CLIENTOBJS) $(COM
  
  %.so: 
  	$(CXX) $(CXXFLAGS) -shared $^ -o $@
-+ifdef FREEBSD
-+	@cp -f $@ $(LIBDIR)/$@.$(APIVERSION)
-+else
- 	@cp --remove-destination $@ $(LIBDIR)/$@.$(APIVERSION)
-+endif
+-	@cp --remove-destination $@ $(LIBDIR)/$@.$(APIVERSION)
++	cp -f $@ $(LIBDIR)/$@.$(APIVERSION)
  
  dist: clean
  	@-rm -rf $(TMPDIR)/$(ARCHIVE)

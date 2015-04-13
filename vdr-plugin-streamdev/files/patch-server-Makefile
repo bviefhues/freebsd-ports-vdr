@@ -1,14 +1,29 @@
---- server/Makefile.orig
+--- server/Makefile.orig	2015-04-13 10:20:59 UTC
 +++ server/Makefile
-@@ -76,7 +76,11 @@ libvdr-$(PLUGIN).so: $(SERVEROBJS) $(COM
+@@ -37,7 +37,7 @@ all: libvdr-$(PLUGIN).so i18n
+ 
+ ### Dependencies:
+ 
+-MAKEDEP = $(CXX) -MM -MG
++MAKEDEP = $(CXX) -MM # # -MG
+ DEPFILE = .dependencies
+ 
+ $(DEPFILE): Makefile
+@@ -48,7 +48,7 @@ $(DEPFILE): Makefile
+ ### Internationalization (I18N):
+ 
+ PODIR     = po
+-LOCALEDIR = $(VDRDIR)/locale
++LOCALEDIR = ../locale
+ I18Npo    = $(wildcard $(PODIR)/*.po)
+ I18Nmsgs  = $(addprefix $(LOCALEDIR)/, $(addsuffix /LC_MESSAGES/vdr-$(PLUGIN).mo, $(notdir $(foreach file, $(I18Npo), $(basename $(file))))))
+ I18Npot   = $(PODIR)/$(PLUGIN).pot
+@@ -76,7 +76,7 @@ libvdr-$(PLUGIN).so: $(SERVEROBJS) $(COM
  
  %.so: 
  	$(CXX) $(CXXFLAGS) -shared $^ -o $@
-+ifdef FREEBSD
+-	@cp --remove-destination $@ $(LIBDIR)/$@.$(APIVERSION)
 +	@cp -f $@ $(LIBDIR)/$@.$(APIVERSION)
-+else
- 	@cp --remove-destination $@ $(LIBDIR)/$@.$(APIVERSION)
-+endif
  
  clean:
  	@-rm -f $(COMMONOBJS) $(SERVEROBJS) $(DEPFILE) $(PODIR)/*.mo $(PODIR)/*.pot *.so *.tgz core* *~
