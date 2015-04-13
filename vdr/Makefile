@@ -76,6 +76,15 @@ PLIST_SUB+=	NLS="@comment "
 ALL_TARGET=	vdr plugins
 .endif
 
+post-makepatch: makepatch
+# patch-eitscan.c is an option, handled in vdr-disable-eitscan.patch. makepatch 
+# generates the patch
+# again, resulting in two patches with same content. This breaks the patch target.
+# The ports make system does not handle the post-makepatch target automatically, 
+# therefore it must be executed manually.
+	@echo "Removing patch-eitscan.c to avoid patch conflict"; \
+	rm -v files/patch-eitscan.c
+
 post-patch:
 # clang doesn't know -MG:
 	@${REINPLACE_CMD} -e '/^MAKEDEP.*-MM/s/-MG[[:space:]]*$$/# -MG/' \
