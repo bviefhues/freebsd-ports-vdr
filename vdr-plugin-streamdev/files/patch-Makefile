@@ -1,6 +1,28 @@
---- Makefile.orig
+--- Makefile.orig	2015-04-13 10:01:06 UTC
 +++ Makefile
-@@ -106,3 +106,7 @@ clean:
+@@ -21,8 +21,10 @@ VERSION = $(shell grep 'const char \*VER
+ 
+ ### The directory environment:
+ 
+-VDRDIR = ../../..
+-LIBDIR = ../../lib
++VDRDIR = /usr/local/include/vdr
++# For #include <vdr/tools.h>
++VDRTOOLSINCDIR = /usr/local/include
++LIBDIR = ../lib
+ TMPDIR = /tmp
+ 
+ ### The version number of VDR (taken from VDR's "config.h"):
+@@ -62,7 +64,7 @@ PACKAGE = vdr-$(ARCHIVE)
+ 
+ ### Includes and Defines (add further entries here):
+ 
+-INCLUDES += -I$(VDRDIR)/include -I..
++INCLUDES += -I$(VDRDIR) -I$(VDRTOOLSINCDIR) -I..
+ 
+ DEFINES += -D_GNU_SOURCE
+ 
+@@ -106,3 +108,7 @@ clean:
  	$(MAKE) -C ./remux clean
  	$(MAKE) -C ./client clean
  	$(MAKE) -C ./server clean
