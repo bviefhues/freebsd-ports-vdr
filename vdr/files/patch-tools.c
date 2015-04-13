@@ -86,6 +86,28 @@
       size_t FromLength = strlen(From);
       char *ToPtr = To;
       if (!ToPtr) {
+@@ -1100,7 +1133,7 @@ cString cString::vsprintf(const char *fm
+   return cString(buffer, true);
+ }
+ 
+-cString WeekDayName(int WeekDay)
++cString WeekDayNameInt(int WeekDay)
+ {
+   char buffer[16];
+   WeekDay = WeekDay == 0 ? 6 : WeekDay - 1; // we start with Monday==0!
+@@ -1118,10 +1151,10 @@ cString WeekDayName(int WeekDay)
+ cString WeekDayName(time_t t)
+ {
+   struct tm tm_r;
+-  return WeekDayName(localtime_r(&t, &tm_r)->tm_wday);
++  return WeekDayNameInt(localtime_r(&t, &tm_r)->tm_wday);
+ }
+ 
+-cString WeekDayNameFull(int WeekDay)
++cString WeekDayNameFullInt(int WeekDay)
+ {
+   WeekDay = WeekDay == 0 ? 6 : WeekDay - 1; // we start with Monday==0!
+   switch (WeekDay) {
 @@ -1560,7 +1593,11 @@ bool cFile::Open(int FileDes)
       if (!IsOpen()) {
          f = FileDes;
