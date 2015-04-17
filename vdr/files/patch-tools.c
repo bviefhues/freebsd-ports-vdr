@@ -108,6 +108,15 @@
  {
    WeekDay = WeekDay == 0 ? 6 : WeekDay - 1; // we start with Monday==0!
    switch (WeekDay) {
+@@ -1139,7 +1172,7 @@ cString WeekDayNameFull(int WeekDay)
+ cString WeekDayNameFull(time_t t)
+ {
+   struct tm tm_r;
+-  return WeekDayNameFull(localtime_r(&t, &tm_r)->tm_wday);
++  return WeekDayNameFullInt(localtime_r(&t, &tm_r)->tm_wday);
+ }
+ 
+ cString DayDateTime(time_t t)
 @@ -1560,7 +1593,11 @@ bool cFile::Open(int FileDes)
       if (!IsOpen()) {
          f = FileDes;
